@@ -1,0 +1,10 @@
+services:
+  db :
+    image: postgres
+    container_name: einvoicing
+    environment:
+      POSTGRES_DB : einvoicing
+      POSTGRES_USER : einvoicing
+      POSTGRES_PASSWORD : einvoicing
+    ports:
+      - 5432:5432
