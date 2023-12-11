@@ -1,0 +1,11 @@
+les factures d'avoir ne doivent pas dépasser les factures originales
+
+
+les articles à rembourser doivent etre conformes à ceux de la facture orginale
+- checking sur les produit (egal)
+- checking sur le prix (egal)
+- checcking ur la quantité (Somme des qte sur les remboursments  doit ête inférieure ou égale à la qté de la facture originale)
+
+
+
+le montant total des factures d'avoir doivent être inférieurs ou égal à la facture originale

@@ -5,7 +5,8 @@ import com.sourcmind.alumni.einvoicing.exceptions.AlreadyExistException;
 import com.sourcmind.alumni.einvoicing.exceptions.Error;
 import com.sourcmind.alumni.einvoicing.exceptions.NotFoundException;
 import com.sourcmind.alumni.einvoicing.repositories.TaxGroupRepository;
-import com.sourcmind.alumni.einvoicing.services.TaxGroupService;
+import com.sourcmind.alumni.einvoicing.services.CodeReadable;
+import com.sourcmind.alumni.einvoicing.services.Crud;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
-public class TaxGroupServiceImpl implements TaxGroupService {
+public class TaxGroupService implements Crud<TaxGroup>, CodeReadable<TaxGroup> {
     private final TaxGroupRepository taxGroupRepository;
     private static  final String TYPE="Taxgroup";
 

@@ -4,7 +4,7 @@ import com.sourcmind.alumni.einvoicing.converters.TaxGroupConverter;
 import com.sourcmind.alumni.einvoicing.entities.TaxGroup;
 import com.sourcmind.alumni.einvoicing.payloads.requests.TaxGroupRequest;
 import com.sourcmind.alumni.einvoicing.payloads.responses.TaxGroupResponse;
-import com.sourcmind.alumni.einvoicing.services.TaxGroupService;
+import com.sourcmind.alumni.einvoicing.services.impl.TaxGroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

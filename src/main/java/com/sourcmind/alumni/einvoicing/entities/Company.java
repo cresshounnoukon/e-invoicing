@@ -19,11 +19,9 @@ public class Company {
     @GeneratedValue
     private UUID id;
     private String tradeNo;
+    private  String name;
     private String tin;
 
     @OneToMany
     private List<Product> products;
-
-    @OneToMany
-    private List<PointOfSale> pointOfSales;
 }

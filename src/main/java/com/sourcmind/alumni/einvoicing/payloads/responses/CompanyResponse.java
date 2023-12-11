@@ -9,12 +9,12 @@ import java.util.UUID;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class TaxGroupResponse {
+@NoArgsConstructor
+public class CompanyResponse {
     private UUID id;
-    private String code;
     private String name;
-    private double rate;
+    private String tradeNo;
+    private String tin;
 }
 

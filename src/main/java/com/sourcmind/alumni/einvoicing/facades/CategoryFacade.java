@@ -4,7 +4,7 @@ import com.sourcmind.alumni.einvoicing.converters.CategoryConverter;
 import com.sourcmind.alumni.einvoicing.entities.Category;
 import com.sourcmind.alumni.einvoicing.payloads.requests.CategoryRequest;
 import com.sourcmind.alumni.einvoicing.payloads.responses.CategoryResponse;
-import com.sourcmind.alumni.einvoicing.services.CategoryService;
+import com.sourcmind.alumni.einvoicing.services.impl.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

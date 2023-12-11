@@ -19,4 +19,10 @@ public class GlobalException {
     public Error handleAlreadyExistException(AlreadyExistException exception) {
         return exception.getError();
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {DataUnthorizeProcessingException.class})
+    public Error handleDataUnthoerizeProcessingException(DataUnthorizeProcessingException exception) {
+        return exception.getError();
+    }
 }

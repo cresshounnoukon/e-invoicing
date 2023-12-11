@@ -1,10 +1,7 @@
 package com.sourcmind.alumni.einvoicing.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,18 +11,35 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Invoice {
     @Id
     @GeneratedValue
     private UUID id;
     @ManyToOne
+    private  TypeInvoice typeInvoice;
+    @ManyToOne
     private Company customer;
 
     @ManyToOne
-    private PointOfSale pointOfSale;
+    private Company company;
+
+    @ManyToOne
+    private Invoice parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Invoice> children;
+
+
 
     @OneToMany
     private List<Item> items;
+
+    public double getTotal() {
+        return items.stream()
+                .mapToDouble(Item::getTotal)
+                .sum();
+    }
 
 
 }

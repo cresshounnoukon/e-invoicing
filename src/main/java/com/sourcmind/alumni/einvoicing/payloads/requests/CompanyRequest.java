@@ -1,4 +1,4 @@
-package com.sourcmind.alumni.einvoicing.payloads.responses;
+package com.sourcmind.alumni.einvoicing.payloads.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,11 @@ import java.util.UUID;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class TaxGroupResponse {
-    private UUID id;
-    private String code;
+@NoArgsConstructor
+public class CompanyRequest {
     private String name;
-    private double rate;
+    private String tradeNo;
+    private String tin;
 }
 

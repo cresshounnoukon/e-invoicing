@@ -4,7 +4,8 @@ import com.sourcmind.alumni.einvoicing.entities.Category;
 import com.sourcmind.alumni.einvoicing.exceptions.Error;
 import com.sourcmind.alumni.einvoicing.exceptions.NotFoundException;
 import com.sourcmind.alumni.einvoicing.repositories.CategoryRepository;
-import com.sourcmind.alumni.einvoicing.services.CategoryService;
+import com.sourcmind.alumni.einvoicing.services.CodeReadable;
+import com.sourcmind.alumni.einvoicing.services.Crud;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
-public class CategoryServiceImpl implements CategoryService {
+public class CategoryService implements Crud<Category>, CodeReadable<Category> {
     private final CategoryRepository categoryRepository;
     private static  final String TYPE="Categorty";
 
@@ -55,6 +56,11 @@ public class CategoryServiceImpl implements CategoryService {
                                 .build()
                 )
         );
+    }
+
+    @Override
+    public boolean existsByCode(String code) {
+        return categoryRepository.existsByCode(code);
     }
 
     @Override
