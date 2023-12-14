@@ -2,6 +2,7 @@ package com.sourcmind.alumni.einvoicing.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,9 +31,7 @@ public class Invoice {
     @OneToMany(mappedBy = "parent")
     private List<Invoice> children;
 
-
-
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Item> items;
 
     public double getTotal() {
@@ -40,6 +39,9 @@ public class Invoice {
                 .mapToDouble(Item::getTotal)
                 .sum();
     }
+
+
+
 
 
 }

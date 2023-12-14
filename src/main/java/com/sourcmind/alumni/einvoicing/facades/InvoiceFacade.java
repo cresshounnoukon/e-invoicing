@@ -7,6 +7,7 @@ import com.sourcmind.alumni.einvoicing.exceptions.Error;
 import com.sourcmind.alumni.einvoicing.payloads.requests.InvoiceRequest;
 import com.sourcmind.alumni.einvoicing.payloads.responses.InvoiceResponse;
 import com.sourcmind.alumni.einvoicing.services.impl.*;
+import com.sourcmind.alumni.einvoicing.utils.InvoiceRule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,79 +46,30 @@ public class InvoiceFacade {
                     .price(itemRequest.getPrice())
                     .quantity(itemRequest.getQuantity())
                     .build();
-
         }).toList();
-
-
-        Invoice parent = service.readById(request.getReference());
-// checking parent invoice
-        if (parent != null) {
-            // checking type invoice authorise for reimbursement
-            if (!typeInvoice.getReimbursement().getCode().equals(parent.getTypeInvoice().getCode())) {
-                throw new DataUnthorizeProcessingException(
-                        Error.builder()
-                                .type("TypeInvoice")
-                                .value(request.getReference())
-                                .message("Type  Invoice is unauthorize for reimbursement")
-                                .field("typeInvoice")
-                                .build()
-
-                );
-            }
-
-            // checking product on parent invoice
-            List<Product> parentProducts = parent.getItems().stream().map(Item::getProduct).toList();
-
-            items.forEach(item -> {
-                if (!parentProducts.contains(item.getProduct())) {
-                    throw new DataUnthorizeProcessingException(
-                            Error.builder()
-                                    .type("Product ")
-                                    .value(item.getId())
-                                    .message(String.format("Product with %s is not authorized for reimburesment", item.getProduct().getId()))
-                                    .field("productId")
-                                    .build()
-
-                    );
-
-                }
-                // verification  quantity som for rembursement is less than original Invoice item
-                // verification for price is equal of originale Invoice item
-
-
-
-
-
-            });
-
-
-
-
-
-        }
-
 
         Invoice invoice = Invoice.builder()
                 .typeInvoice(typeInvoice)
                 .company(company)
                 .customer(customer)
-                //    .items(items)
+                .items(items)
                 .build();
-        invoice = service.save(invoice);
 
-        double invoiceAmount = invoice.getTotal() + parent.getChildren().stream().mapToDouble(Invoice::getTotal).sum();
+        Invoice parent = request.getReference() == null ? null : service.readById(request.getReference());
 
-        double parentTotal = parent.getTotal();
+        // checking parent invoice
+        if (parent != null) {
+            InvoiceRule invoiceRule = new InvoiceRule();
 
-        if(invoiceAmount > parentTotal){
-            throw new DataUnthorizeProcessingException(
-                    Error.builder()
-                            .type("Invoice")
-                            .value(invoiceAmount)
-                            .message("Credit invoice amount exceeds parent invoice amount")
-                            .field("Invoice")
-                            .build());
+            invoiceRule.setCurrentInvoice(invoice);
+            invoiceRule.setParent(parent);
+
+            invoiceRule.checkInvoiceRules();
+
         }
+
+
+        invoice = service.save(invoice);
 
         Invoice finalInvoice = invoice;
         items.forEach(item -> item.setInvoice(finalInvoice));
@@ -127,12 +79,6 @@ public class InvoiceFacade {
         return converter.convert(invoice);
     }
 
-//    public InvoiceService makeRefund(InvoiceRequest request)
-//    {
-//        TypeInvoice typeInvoice = typeInvoiceService.readById(request.getTypeInvoiceId());
-//        if(!typeInvoice.equals())
-//
-//    }
 
 
     public InvoiceResponse readById(UUID id) {
