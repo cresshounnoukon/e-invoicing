@@ -9,3 +9,6 @@ les articles à rembourser doivent etre conformes à ceux de la facture orginale
 
 
 le montant total des factures d'avoir doivent être inférieurs ou égal à la facture originale
+
+
+Remarques : Produit already have price, no need to add price when we create items
