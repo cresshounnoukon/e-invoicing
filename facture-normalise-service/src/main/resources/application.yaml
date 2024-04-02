@@ -1,0 +1,6 @@
+dgi:
+  url: https://developper.impots.bj/sygmef-emcf/api/invoice
+  token :
+
+server:
+  port: 8082
