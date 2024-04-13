@@ -35,6 +35,9 @@ public class DgiInvoiceFacade {
 
     public InvoiceConfirmResponse normalize(DgiInvoice dgiInvoice, String token, Action action) {
         DgiInvoiceResponse dgiInvoiceResponse = saveInvoice(dgiInvoice, token);
+        String uid = dgiInvoiceResponse.getUid();
+        if(uid == null)
+            throw new NullPointerException(dgiInvoiceResponse.getErrorDesc());
         if (action == Action.confirm) {
             return confirmInvoice((UUID.fromString(dgiInvoiceResponse.getUid())), token);
         }else{

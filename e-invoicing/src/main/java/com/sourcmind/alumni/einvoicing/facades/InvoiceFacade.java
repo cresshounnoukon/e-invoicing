@@ -33,7 +33,6 @@ public class InvoiceFacade {
 
     public InvoiceResponse create(InvoiceRequest request) {
 
-
         TypeInvoice typeInvoice = typeInvoiceService.readById(request.getTypeInvoiceId());
 
         Company company = companyService.readById(request.getCompanyId());
@@ -42,18 +41,18 @@ public class InvoiceFacade {
         List<Item> items = request.getItems().stream().map(itemRequest -> {
             Product product = productService.readById(itemRequest.getProductId());
             return Item.builder()
-                    .product(product)
-                    .price(itemRequest.getPrice())
-                    .quantity(itemRequest.getQuantity())
-                    .build();
+                .product(product)
+                .price(itemRequest.getPrice())
+                .quantity(itemRequest.getQuantity())
+                .build();
         }).toList();
 
         Invoice invoice = Invoice.builder()
-                .typeInvoice(typeInvoice)
-                .company(company)
-                .customer(customer)
-                .items(items)
-                .build();
+            .typeInvoice(typeInvoice)
+            .company(company)
+            .customer(customer)
+            .items(items)
+            .build();
 
         Invoice parent = request.getReference() == null ? null : service.readById(request.getReference());
 
@@ -68,7 +67,6 @@ public class InvoiceFacade {
 
         }
 
-
         invoice = service.save(invoice);
 
         Invoice finalInvoice = invoice;
@@ -78,8 +76,6 @@ public class InvoiceFacade {
         invoice.setItems(items);
         return converter.convert(invoice);
     }
-
-
 
     public InvoiceResponse readById(UUID id) {
         return converter.convert(service.readById(id));

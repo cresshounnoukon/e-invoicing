@@ -17,8 +17,6 @@ import java.util.UUID;
 public class TypeInvoiceController {
     private  final TypeInvoiceFacade facade;
 
-
-
     @GetMapping
     public Page<TypeInvoiceResponse> readAll(Pageable pageable) {
         return facade.readAll(pageable);
