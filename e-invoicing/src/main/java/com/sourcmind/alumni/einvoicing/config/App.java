@@ -1,9 +1,5 @@
 package com.sourcmind.alumni.einvoicing.config;
 
-import java.util.Collections;
-
-import feign.RequestInterceptor;
-import feign.form.ContentType;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
-public class AppConfig {
+public class App {
 
     @Value("${webclient.baseurl}")
     private String url;

@@ -2,6 +2,13 @@ spring:
   application:
     name: e-invoicing
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/e-invoicing
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
   datasource:
     url: jdbc:postgresql://localhost:5432/einvoicing
     username: postgres
@@ -22,3 +29,9 @@ server:
 webclient:
   baseurl: http://localhost:8083/dgiInvoice
   token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IjAyMDIxMTI5NDYzNjV8VFMwMTAwOTc3MyIsInJvbGUiOiJUYXhwYXllciIsIm5iZiI6MTcxMjk0MDAwMSwiZXhwIjoxNzI4NzUxMjAxLCJpYXQiOjE3MTI5NDAwMDEsImlzcyI6ImltcG90cy5iaiIsImF1ZCI6ImltcG90cy5iaiJ9.uL1daGvFCltavZQ0394Hw-klOmckOap1gUoucOn5Z-M
+
+jwt:
+  auth:
+    converter:
+      resource-id: e-invoicing-rest-api
+      principal-attribute: preferred_username
