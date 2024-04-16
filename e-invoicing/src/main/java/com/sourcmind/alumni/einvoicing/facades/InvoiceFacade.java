@@ -2,22 +2,25 @@ package com.sourcmind.alumni.einvoicing.facades;
 
 import com.sourcmind.alumni.einvoicing.converters.InvoiceConverter;
 import com.sourcmind.alumni.einvoicing.entities.*;
-import com.sourcmind.alumni.einvoicing.exceptions.DataUnthorizeProcessingException;
-import com.sourcmind.alumni.einvoicing.exceptions.Error;
 import com.sourcmind.alumni.einvoicing.payloads.requests.InvoiceRequest;
 import com.sourcmind.alumni.einvoicing.payloads.responses.InvoiceResponse;
 import com.sourcmind.alumni.einvoicing.services.impl.*;
 import com.sourcmind.alumni.einvoicing.utils.InvoiceRule;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class InvoiceFacade {
 
     private final InvoiceConverter converter;
@@ -26,6 +29,7 @@ public class InvoiceFacade {
     private final TypeInvoiceService typeInvoiceService;
     private final ProductService productService;
     private final ItemService itemService;
+    private final EmcfServiceWebClientService emcfServiceWebClient;
 
     public Page<InvoiceResponse> readAll(Pageable pageable) {
         return service.readAll(pageable).map(converter::convert);
@@ -74,6 +78,7 @@ public class InvoiceFacade {
 
         items = itemService.saveAll(items);
         invoice.setItems(items);
+
         return converter.convert(invoice);
     }
 
