@@ -4,10 +4,13 @@ import java.util.UUID;
 
 import com.sourcmind.alumni.einvoicing.enums.Action;
 import com.sourcmind.alumni.einvoicing.facades.EmcfInvoiceFacade;
+import com.sourcmind.alumni.einvoicing.payloads.requests.emcf.InvoiceRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -19,9 +22,9 @@ public class EmcfInvoiceController {
 
     private final EmcfInvoiceFacade emcfInvoiceFacade;
 
-    @PutMapping("{invoiceId}")
-    public Mono<ResponseEntity<?>> save(@PathVariable("invoiceId") UUID uuid) {
-        return emcfInvoiceFacade.save(uuid);
+    @PostMapping
+    public Mono<ResponseEntity<?>> save(@RequestBody InvoiceRequestDto invoiceRequestDto) {
+        return emcfInvoiceFacade.save(invoiceRequestDto.invoiceId());
     }
 
     @PutMapping("{emcfInvoiceId}/{action}")

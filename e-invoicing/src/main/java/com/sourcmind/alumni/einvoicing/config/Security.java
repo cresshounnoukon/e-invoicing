@@ -27,8 +27,8 @@ public class Security {
             .csrf(Customizer.withDefaults())
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(new AntPathRequestMatcher("/emcf-invoice/**"))
-                .hasRole("client_validator")
-                .requestMatchers(new AntPathRequestMatcher(HttpMethod.DELETE.name(), "/invoices"))
+                .hasAnyRole("client_validator", "client_admin")
+                .requestMatchers(new AntPathRequestMatcher("/invoices/**", HttpMethod.DELETE.name()))
                 .hasRole("client_admin")
                 .anyRequest().authenticated());
 
