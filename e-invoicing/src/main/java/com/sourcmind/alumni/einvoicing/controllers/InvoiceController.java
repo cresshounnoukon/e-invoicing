@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -20,8 +21,8 @@ public class InvoiceController {
     private  final InvoiceFacade facade;
 
     @GetMapping
-    public Page<InvoiceResponse> readAll(Pageable pageable) {
-        return facade.readAll(pageable);
+    public List<InvoiceResponse> readAll() {
+        return facade.readAll();
     }
 
     @PostMapping

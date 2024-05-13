@@ -17,6 +17,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -33,6 +34,10 @@ public class InvoiceFacade {
 
     public Page<InvoiceResponse> readAll(Pageable pageable) {
         return service.readAll(pageable).map(converter::convert);
+    }
+
+    public List<InvoiceResponse> readAll() {
+        return service.readAll().stream().map(converter::convert).collect(Collectors.toList());
     }
 
     public InvoiceResponse create(InvoiceRequest request) {
@@ -84,6 +89,9 @@ public class InvoiceFacade {
 
     public InvoiceResponse readById(UUID id) {
         return converter.convert(service.readById(id));
+    }
+    public InvoiceResponse readByEmcfInvoiceId(String id) {
+        return converter.convert(service.readByEmcfInvoiceId(id));
     }
 
     public void delete(UUID id) {

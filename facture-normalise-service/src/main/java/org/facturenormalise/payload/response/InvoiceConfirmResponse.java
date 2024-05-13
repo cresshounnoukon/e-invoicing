@@ -1,5 +1,7 @@
 package org.facturenormalise.payload.response;
 
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class InvoiceConfirmResponse {
+    public UUID uuid;
     public String dateTime;
     public String qrCode;
     public String codeMECeFDGI;

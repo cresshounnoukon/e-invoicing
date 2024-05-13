@@ -6,8 +6,29 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/realms/e-invoicing
+          issuer-uri: http://localhost:8080/realms/e-invoicing-realm
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: normalizeInvoice
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      #      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring:
+          deserializer:
+            value:
+              delegate:
+                class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: '*'
 
   datasource:
     url: jdbc:postgresql://localhost:5432/einvoicing
@@ -25,6 +46,17 @@ spring:
 
 server:
   port: 8082
+  servlet:
+    context-path: /api
+
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: e-invoicing
+
+keycloak:
+  auth-server-url: http://localhost:8080
+  realm: e-invoicing-realm
 
 webclient:
   baseurl: http://localhost:8083/dgiInvoice
@@ -33,5 +65,9 @@ webclient:
 jwt:
   auth:
     converter:
-      resource-id: e-invoicing-rest-api
+      resource-id: e-invoicing
       principal-attribute: preferred_username
+
+topic:
+  emcf: e-invoicing
+  normalize : normalize-invoice

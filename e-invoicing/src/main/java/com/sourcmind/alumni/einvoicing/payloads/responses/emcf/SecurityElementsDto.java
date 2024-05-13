@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SecurityElementsDto {
+    public String uuid;
     public String dateTime;
     public String qrCode;
     public String codeMECeFDGI;

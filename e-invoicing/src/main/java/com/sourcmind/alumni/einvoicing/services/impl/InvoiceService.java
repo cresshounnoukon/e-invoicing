@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -25,6 +26,10 @@ public class InvoiceService implements Crud<Invoice> {
         return repository.findAll(pageable);
     }
 
+    public List<Invoice> readAll() {
+        return repository.findAll();
+    }
+
     @Override
     public Invoice save(Invoice data) {
         return repository.save(data);
@@ -33,6 +38,19 @@ public class InvoiceService implements Crud<Invoice> {
     @Override
     public Invoice readById(UUID uuid) {
         return repository.findById(uuid).orElseThrow(
+                () -> new NotFoundException(
+                        Error.builder()
+                                .type(TYPE)
+                                .message(String.format("NOT FOUND %s", uuid))
+                                .field("uuid")
+                                .value(uuid)
+                                .build()
+                )
+        );
+    }
+
+    public Invoice readByEmcfInvoiceId(String uuid) {
+        return repository.findInvoiceByEmcfInvoiceId(uuid).orElseThrow(
                 () -> new NotFoundException(
                         Error.builder()
                                 .type(TYPE)

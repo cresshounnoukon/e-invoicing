@@ -16,4 +16,5 @@ public class InvoiceResponse {
     private TypeInvoiceResponse typeInvoice;
     private CompanyResponse company;
     private CompanyResponse customer;
+    private boolean normalize;
 }

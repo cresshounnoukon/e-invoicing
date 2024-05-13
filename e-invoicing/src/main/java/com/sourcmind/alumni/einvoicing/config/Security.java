@@ -26,6 +26,17 @@ public class Security {
         httpSecurity
             .csrf(Customizer.withDefaults())
             .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(
+                    new AntPathRequestMatcher("/favicon.ico"),
+                    new AntPathRequestMatcher("/**/*.png"),
+                    new AntPathRequestMatcher("/**/*.gif"),
+                    new AntPathRequestMatcher("/**/*.svg"),
+                    new AntPathRequestMatcher("/**/*.jpg"),
+                    new AntPathRequestMatcher("/**/*.html"),
+                    new AntPathRequestMatcher("/**/*.css"),
+                    new AntPathRequestMatcher("/**/*.js")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/emcf-invoice/**"))
                 .hasAnyRole("client_validator", "client_admin")
                 .requestMatchers(new AntPathRequestMatcher("/invoices/**", HttpMethod.DELETE.name()))
@@ -33,7 +44,7 @@ public class Security {
                 .anyRequest().authenticated());
 
         httpSecurity
-            .oauth2ResourceServer(oauth2->oauth2.jwt(jwtConfigurer -> jwtConfigurer
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
                 .jwtAuthenticationConverter(jwtAuthConverter)));
 
         httpSecurity

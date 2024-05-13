@@ -2,6 +2,7 @@ package com.sourcmind.alumni.einvoicing.facades;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -11,11 +12,15 @@ import com.sourcmind.alumni.einvoicing.enums.Action;
 import com.sourcmind.alumni.einvoicing.payloads.requests.emcf.ClientDto;
 import com.sourcmind.alumni.einvoicing.payloads.requests.emcf.InvoiceRequestDataDto;
 import com.sourcmind.alumni.einvoicing.payloads.requests.emcf.ItemDto;
+import com.sourcmind.alumni.einvoicing.payloads.requests.emcf.NormalizeInvoiceDto;
 import com.sourcmind.alumni.einvoicing.payloads.requests.emcf.OperatorDto;
 import com.sourcmind.alumni.einvoicing.payloads.requests.emcf.PaymentDto;
+import com.sourcmind.alumni.einvoicing.config.KafkaProducerConfig;
+import com.sourcmind.alumni.einvoicing.payloads.responses.emcf.InvoiceResponseDto;
 import com.sourcmind.alumni.einvoicing.services.impl.EmcfServiceWebClientService;
 import com.sourcmind.alumni.einvoicing.services.impl.InvoiceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,7 +31,13 @@ import reactor.core.publisher.Mono;
 public class EmcfInvoiceFacade {
 
     private final InvoiceService invoiceService;
+
     private final EmcfServiceWebClientService emcfServiceWebClientService;
+
+    private final KafkaProducerConfig producer;
+
+    @Value("${webclient.token}")
+    private String token;
 
     public Mono<ResponseEntity<?>> save(UUID invoiceId) {
 
@@ -75,6 +86,17 @@ public class EmcfInvoiceFacade {
         return emcfServiceWebClientService.save(invoiceRequestDataDto)
             .map(responseEntity -> {
                 if (responseEntity.getStatusCode().is2xxSuccessful()) {
+
+                    InvoiceResponseDto invoiceResponseDto = Objects.requireNonNull(responseEntity.getBody());
+
+                    invoice.setEmcfInvoiceId(invoiceResponseDto.getUid());
+
+                    invoiceService.save(invoice);
+
+                    NormalizeInvoiceDto normalizeInvoiceDto = new NormalizeInvoiceDto(Objects.requireNonNull(responseEntity.getBody()).getUid(), token);
+
+                    producer.sendMessage(normalizeInvoiceDto);
+
                     return ResponseEntity.ok(responseEntity.getBody());
                 } else {
                     return ResponseEntity.status(responseEntity.getStatusCode())
