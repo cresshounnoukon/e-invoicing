@@ -45,7 +45,7 @@ public class DgiInvoiceController {
 
     @PostMapping("normalize/{action}")
     public InvoiceConfirmResponse normalizeInvoice(@RequestBody DgiInvoice dgiInvoice, @PathVariable("action") Action action, @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        log.info("test");
+        log.info("normalize");
         return dgiInvoiceFacade.normalize(dgiInvoice, token, action);
     }
 

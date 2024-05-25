@@ -25,4 +25,10 @@ public class GlobalException {
     public Error handleDataUnthoerizeProcessingException(DataUnthorizeProcessingException exception) {
         return exception.getError();
     }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = {UnauthorizedException.class})
+    public Error handleUnauthorizedException(UnauthorizedException exception) {
+        return exception.getError();
+    }
 }

@@ -12,3 +12,6 @@ le montant total des factures d'avoir doivent être inférieurs ou égal à la f
 
 
 Remarques : Produit already have price, no need to add price when we create items
+
+Ajouter un champs Status et dgiInvoiceId au niveau de ta table Invoice
+utilise kafka pour notifier les changements

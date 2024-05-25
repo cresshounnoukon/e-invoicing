@@ -2,7 +2,6 @@ package com.sourcmind.alumni.einvoicing.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,15 +33,15 @@ public class Invoice {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Item> items;
 
+    @Column(columnDefinition="tinyint(1) default 0")
+    private boolean normalize;
+
+    private String emcfInvoiceId;
+
     public double getTotal() {
         return items.stream()
                 .mapToDouble(Item::getTotal)
                 .sum();
     }
-
-
-
-
-
 }
 
